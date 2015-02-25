@@ -1,0 +1,41 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Users\scobb_000\Documents\445L\Lab5\MAX5353.uvproj
+Project File Date:  01/27/2015
+
+<h2>Output:</h2>
+Build target 'MAX5353'
+compiling Heartbeat.c...
+Heartbeat.h(4): warning:  #1295-D: Deprecated declaration Heartbeat_Init - give arg types
+  void Heartbeat_Init();
+Heartbeat.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+TempoTimer.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+Heartbeat.c(27): warning:  #223-D: function "TempoTimer_setHeartbeatTask" declared implicitly
+        TempoTimer_setHeartbeatTask(&blinkHeartbeat);
+Heartbeat.c: 4 warnings, 0 errors
+compiling FrequencyTimer.c...
+TempoTimer.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+FrequencyTimer.c(82): warning:  #1-D: last line of file ends without a newline
+  #endif
+FrequencyTimer.c: 2 warnings, 0 errors
+compiling TempoTimer.c...
+TempoTimer.h(6): warning:  #1-D: last line of file ends without a newline
+  #endif
+TempoTimer.c(36): warning:  #1-D: last line of file ends without a newline
+  }
+TempoTimer.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=1598 RO-data=134 RW-data=4 ZI-data=1124  
+".\MAX5353.axf" - 0 Error(s), 8 Warning(s).
+
+TempoTimer.c(1): error:  #5: cannot open source input file "Timer1A.h": No such file or directory
+  #include "Timer1A.h"
+TempoTimer.c: 0 warnings, 1 error
+".\MAX5353.axf" - 1 Error(s), 8 Warning(s).
+Target not created

@@ -1,0 +1,31 @@
+Dependencies for Project 'MAX5353', Target 'MAX5353': (DO NOT MODIFY !)
+F (.\startup.s)(0x54C7C397)(--cpu Cortex-M4 --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary--list .\startup.lst --xref -o .\startup.o --depend .\startup.d)
+F (.\MAX5353.c)(0x54C7C396)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\max5353.o --omf_browse .\max5353.crf --depend .\max5353.d)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+F (.\MAX5353TestMain.c)(0x54C7C396)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\max5353testmain.o --omf_browse .\max5353testmain.crf --depend .\max5353testmain.d)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (MAX5353.h)(0x54C7C396)
+I (SysTick.h)(0x54C7C397)
+F (.\SysTick.c)(0x54C7C397)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+F (.\Heartbeat.c)(0x54EE3906)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\heartbeat.o --omf_browse .\heartbeat.crf --depend .\heartbeat.d)
+I (Heartbeat.h)(0x54DCE254)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+I (TempoTimer.h)(0x54EE3BCC)
+F (.\ButtonManager.c)(0x54EE38BC)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\buttonmanager.o --omf_browse .\buttonmanager.crf --depend .\buttonmanager.d)
+I (ButtonManager.h)(0x54ECB951)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (SysTick.h)(0x54C7C397)
+F (.\FrequencyTimer.c)(0x54EE3BE4)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\frequencytimer.o --omf_browse .\frequencytimer.crf --depend .\frequencytimer.d)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+I (TempoTimer.h)(0x54EE3BCC)
+I (FrequencyTimer.h)(0x54EE3B98)
+F (.\TempoTimer.c)(0x54EE3B6D)(-c --cpu Cortex-M4 -D__EVAL -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --c99-I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include-I C:\Keil\ARM\Inc\Luminary-Drvmdk -DPART_LM4F120H5QR-o .\tempotimer.o --omf_browse .\tempotimer.crf --depend .\tempotimer.d)
+I (TempoTimer.h)(0x54EE3BCC)
+I (inc/tm4c123gh6pm.h)(0x54CEA318)
+I (C:\Keil\ARM\ARMCC\include\stdint.h)(0x51C89844)
