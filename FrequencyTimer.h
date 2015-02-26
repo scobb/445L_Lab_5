@@ -24,12 +24,17 @@
 
  #ifndef _FREQUENCY_TIMER_H_
  #define _FREQUENCY_TIMER_H_
+ #include <stdint.h>
+ #include "Note.h"
+ #include "Instrument.h"
 
 // ***************** Timer0A_Init ****************
 // Activate Timer0A interrupts to run user task periodically
 // Inputs:  task is a pointer to a user function
 //          period in 12.5ns units
 // Outputs: none
-void FrequencyTimer_Init(void);
-
+void FrequencyTimer_Init(void);	
+void FrequencyTimer_setNotes(Note* notes);
+void FrequencyTimer_setInstruments(Instrument* instruments);
+void FrequencyTimer_setNum(uint8_t num);
 #endif // __TIMER0AINTS_H__

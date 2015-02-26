@@ -40,6 +40,9 @@ long StartCritical (void);    // previous I bit, disable interrupts
 void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 void (*PeriodicTask)(void);   // user function
+Note* myNotes;
+Instrument* myInstruments;
+uint8_t myNum;
 
 // ***************** FrequencyTimer_Init ****************
 // Activate Timer0A interrupts to run user task periodically
@@ -79,18 +82,18 @@ void FrequencyTimer_disarm() {
 	EndCritical(sr);
 }
 
-uint16_t FrequencyTimer_combine(Note notes[], Instrument instruments[], uint8_t num){
+uint16_t FrequencyTimer_combine(Note* notes, Instrument* instruments, uint8_t num){
 	/*
-	inputs: notes[] - list of note objects. first note must 
+	inputs: notes - list of note objects. first note must 
 	have highest frequency.
-	instruments[] - instrument objects. must match number of note entries.
+	instruments - instrument objects. must match number of note entries.
 	num - size of each array above.
 	outputs: magnitude of combined wave.
 	*/
 	static uint32_t total_steps = 0;
 	uint8_t i;
 	uint32_t total_mag;
-	uint8_t* steps = (uint8_t*) malloc(num);
+	uint8_t* steps = (uint8_t*) malloc(sizeof(uint8_t) * num);
 	// fastest frequency will increment every time.
 	steps[0] = total_steps % NUM_STEPS;
 	total_mag = (instruments[0].waveForm[steps[0]] * notes[0].dynamicPercent) / 100;
@@ -103,8 +106,18 @@ uint16_t FrequencyTimer_combine(Note notes[], Instrument instruments[], uint8_t 
 	return total_mag / num;
 }
 	
+void FrequencyTimer_setNotes(Note* notes){
+	myNotes = notes;
+}
+void FrequencyTimer_setInstruments(Instrument* instruments){
+	myInstruments = instruments;
+}
+void FrequencyTimer_setNum(uint8_t num){
+	myNum = num;
+}
 
 void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
-	// step through the array, send the Speaker the right value
+	// uint16_t mag = FrequencyTimer_combine(myNotes, myInstruments, myNum); 
+	// DAC_Out(mag);
 }

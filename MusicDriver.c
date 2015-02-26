@@ -19,7 +19,9 @@ uint8_t MusicDriver_getNextTimeStep(Note* currentNotes, Instrument* currentInstr
 	// ++ind;
 	// currentNotes = &Music[ind].Notes;
 	// currentInstruments = &Music[ind].Instruments;
+	// OR currentInstruments = &DefaultInstruments;
 	// return &Music[ind].num;
+	// OR return defaultNum;
 	
 	
 	return 0;
