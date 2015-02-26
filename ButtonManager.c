@@ -2,7 +2,7 @@
 #include "inc/tm4c123gh6pm.h"
 #include "SysTick.h"
 #include <stdint.h>
-
+uint8_t isPlaying, isFast;
 long StartCritical (void);    // previous I bit, disable interrupts
 void EndCritical(long sr);    // restore I bit to previous value
 #define PD0       (*((volatile uint32_t *)0x40007004))
@@ -22,6 +22,8 @@ void ButtonManager_Init(){
 	
   SYSCTL_RCGCGPIO_R |= 0x00000008;  // 1) activate clock for Port D
   delay = SYSCTL_RCGCGPIO_R;        // allow time for clock to start
+	isPlaying = FALSE;
+	isFast = FALSE;
   // GPIO_PORTD_LOCK_R = GPIO_LOCK_KEY;   // Not using PD7 so don't need to unlock
   // GPIO_PORTD_CR_R |= 0x4C;           // Don't need to unlock PD7
   GPIO_PORTD_AFSEL_R &= ~0x4C;        // 6) disable alt funct on PD1-0
@@ -46,6 +48,10 @@ void ButtonManager_setHandler(uint32_t portAddress, void(*handler)(void)){
 	// need to store these handlers somehow. Would be easiest to use a hashtable with portAddress as key
 	buttonStatus bs = {(*(volatile uint32_t*)portAddress), FALSE, handler};
 }
+
+void ButtonManager_playingComplete(){
+	isPlaying = FALSE;
+}
 void CheckDebounce(buttonStatus* buttons, uint8_t numPorts){
 	// private function to allow us to debounce all buttons
 	uint8_t i;
@@ -59,14 +65,26 @@ void CheckDebounce(buttonStatus* buttons, uint8_t numPorts){
 }
 void playPressed(){
 	// determine action dependent on current state. Update state.
+	if (isPlaying){
+		// TempoTimer_disarm();
+		// FrequencyTimer_disarm();
+	} else {
+		// TempoTimer_arm();
+		// FrequencyTimer_arm();
+	}
 }
 void rewindPressed(){
 	// move song back to beginning
+	// MusicDriver_reset();
 	
 }
 void modePressed(){
 	// adjust tempo
-	
+	if (!isFast) {
+		// TempoTimer_init(PERIOD_BPM_240_12);
+	} else {
+		// TempoTimer_init(PERIOD_BPM_120_12);
+	}
 }
 
 void GPIOPortD_Handler(void){

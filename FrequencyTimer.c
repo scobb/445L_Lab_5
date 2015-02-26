@@ -26,9 +26,12 @@
  http://users.ece.utexas.edu/~valvano/
  */
 #include <stdint.h>
+#include <stdlib.h>
 #include "inc/tm4c123gh6pm.h"
 #include "TempoTimer.h"
 #include "FrequencyTimer.h"
+#include "Note.h"
+#include "Instrument.h"
 #define PF4       (*((volatile uint32_t *)0x40025040))
 
 void DisableInterrupts(void); // Disable interrupts
@@ -57,7 +60,7 @@ void FrequencyTimer_Init(){
   TIMER0_CTL_R |= 0x00000001;      // 10) enable timer0A
   EndCritical(sr);
 }
-// TODO - this approach or pass the handler?
+
 void FrequencyTimer_arm(uint32_t periodCycles){
 	long sr = StartCritical();
   TIMER0_CTL_R &= ~0x00000001;     		// 1) disable timer0A during setup
@@ -74,6 +77,30 @@ void FrequencyTimer_disarm() {
   TIMER0_IMR_R &= ~0x00000001;      // 7) disarm timeout interrupt
   TIMER0_CTL_R |= 0x00000001;     	// 8) enable timer0A
 	EndCritical(sr);
+}
+
+uint16_t FrequencyTimer_combine(Note notes[], Instrument instruments[], uint8_t num){
+	/*
+	inputs: notes[] - list of note objects. first note must 
+	have highest frequency.
+	instruments[] - instrument objects. must match number of note entries.
+	num - size of each array above.
+	outputs: magnitude of combined wave.
+	*/
+	static uint32_t total_steps = 0;
+	uint8_t i;
+	uint32_t total_mag;
+	uint8_t* steps = (uint8_t*) malloc(num);
+	// fastest frequency will increment every time.
+	steps[0] = total_steps % NUM_STEPS;
+	total_mag = (instruments[0].waveForm[steps[0]] * notes[0].dynamicPercent) / 100;
+	for (i = 1; i < num; ++i){
+		steps[i] = (total_steps * notes[0].periodCycles / notes[i].periodCycles) % NUM_STEPS;
+		total_mag += (instruments[i].waveForm[steps[i]] * notes[i].dynamicPercent) / 100;
+	}
+	
+	free(steps);
+	return total_mag / num;
 }
 	
 

@@ -1,5 +1,6 @@
 #include "TempoTimer.h"
 #include "inc/tm4c123gh6pm.h"
+#include "MusicDriver.h"
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
@@ -30,7 +31,14 @@ void TempoTimer_setHeartbeatTask(void(*task)(void)){
 
 void Timer1A_Handler(void){
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
+	long sr;
 	if (HeartbeatTask){
 		(*HeartbeatTask)();
 	}
+	// Note* currentNotes;
+	// Instrument* currentInstruments;
+	// long sr = StartCritical();
+	// uint8_t num = MusicDriver_getNextTimeStep(currentNotes, currentInstruments);
+	// FrequencyTimer_setParameters(currentNotes, currentInstruments, num);
+	// EndCritical(sr);
 }

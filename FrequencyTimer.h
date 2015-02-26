@@ -30,6 +30,6 @@
 // Inputs:  task is a pointer to a user function
 //          period in 12.5ns units
 // Outputs: none
-void FrequencyTimer_Init(uint32_t period);
+void FrequencyTimer_Init(void);
 
 #endif // __TIMER0AINTS_H__

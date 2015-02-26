@@ -31,8 +31,10 @@
 #include "SysTick.h"
 #include "ButtonManager.h"
 #include "FrequencyTimer.h"
-#include "TempoTimer."
+#include "TempoTimer.h"
 
+// define the period at 120 beats per minute, refreshing each 12th note
+#define PERIOD_BPM_120_12 3333333
 // 12-bit 32-element sine wave
 // multiply each value by 2 to shift into bits 12:1 of SSI packet
 // three control bits in 15:13 are all zero for immediate DAC update
@@ -51,7 +53,7 @@ int main(void){
 	
 	ButtonManager_Init();
 	FrequencyTimer_Init();
-	TempoTimer_Init();
+	TempoTimer_Init(PERIOD_BPM_120_12);
 	while (1);
 	
 	/*begin their code
