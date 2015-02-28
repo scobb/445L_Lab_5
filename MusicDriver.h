@@ -5,7 +5,7 @@
 #include "Instrument.h"
 void MusicDriver_Init(void);
 void MusicDriver_reset(void);
-uint8_t MusicDriver_getNextTimeStep(Note* currentNotes, Instrument* currentInstruments);
+uint8_t MusicDriver_getNextTimeStep(Note** currentNotes, Instrument** currentInstruments);
 
 
 

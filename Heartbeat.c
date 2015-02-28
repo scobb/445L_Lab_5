@@ -6,7 +6,10 @@
 #define LED (*((volatile uint32_t *)0x40025008)) //Uses PF1. Looks like mainly for colors (1=red)
 
 void blinkHeartbeat(){
-	LED ^= 0x02;
+	static int count = 0;
+	count = (count + 1) % 12;
+	if (count == 0)
+		LED ^= 0x02;
 }
 
 void Heartbeat_Init(){

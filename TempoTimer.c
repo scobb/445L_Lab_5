@@ -1,7 +1,7 @@
 #include "TempoTimer.h"
 #include "inc/tm4c123gh6pm.h"
 #include "MusicDriver.h"
-
+#include "FrequencyTimer.h"
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 long StartCritical (void);    // previous I bit, disable interrupts
@@ -9,10 +9,11 @@ void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 
 void (*HeartbeatTask)(void);   // user function
-void TempoTimer_Init(uint32_t period){long sr;
+void TempoTimer_Init(uint32_t period){long sr; int delay;
   sr = StartCritical(); 
   SYSCTL_RCGCTIMER_R |= 0x02;      // 0) activate TIMER1
   // Timer1AFunction = task;             // user function (this line also allows time to finish activating)
+	delay = 1;
   TIMER1_CTL_R &= ~0x00000001;     // 1) disable TIMER1A during setup
   TIMER1_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
   TIMER1_TAMR_R = 0x00000002;      // 3) configure for periodic mode, default down-count settings
@@ -35,10 +36,13 @@ void Timer1A_Handler(void){
 	if (HeartbeatTask){
 		(*HeartbeatTask)();
 	}
-	// Note* currentNotes;
-	// Instrument* currentInstruments;
-	// long sr = StartCritical();
-	// uint8_t num = MusicDriver_getNextTimeStep(currentNotes, currentInstruments);
-	// FrequencyTimer_setParameters(currentNotes, currentInstruments, num);
-	// EndCritical(sr);
+	Note* currentNote;
+	Instrument* currentInstrument;
+	sr = StartCritical();
+	uint8_t num = MusicDriver_getNextTimeStep(&currentNote, &currentInstrument);
+	FrequencyTimer_setNotes(currentNote);
+	FrequencyTimer_setInstruments(currentInstrument);
+	FrequencyTimer_setNum(num);
+	EndCritical(sr);
+	FrequencyTimer_arm(currentNote->periodCycles);
 }

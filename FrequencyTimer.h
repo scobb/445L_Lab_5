@@ -37,4 +37,5 @@ void FrequencyTimer_Init(void);
 void FrequencyTimer_setNotes(Note* notes);
 void FrequencyTimer_setInstruments(Instrument* instruments);
 void FrequencyTimer_setNum(uint8_t num);
+void FrequencyTimer_arm(uint32_t periodCycles);
 #endif // __TIMER0AINTS_H__

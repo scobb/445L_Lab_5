@@ -1,6 +1,7 @@
-#ifdef _TEMPO_TIMER_H_
-#define _TEMPO_TIMER_H_
-
-void TempoTimer_Init(uint32_t period);
+#ifndef _TEMPO_TIMER_
+#define _TEMPO_TIMER_
+void TempoTimer_Init();
 void TempoTimer_setHeartbeatTask(void(*task)(void));
+
+
 #endif

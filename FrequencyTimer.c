@@ -32,6 +32,7 @@
 #include "FrequencyTimer.h"
 #include "Note.h"
 #include "Instrument.h"
+#include "MAX5353.h"
 #define PF4       (*((volatile uint32_t *)0x40025040))
 
 void DisableInterrupts(void); // Disable interrupts
@@ -81,7 +82,6 @@ void FrequencyTimer_disarm() {
   TIMER0_CTL_R |= 0x00000001;     	// 8) enable timer0A
 	EndCritical(sr);
 }
-
 uint16_t FrequencyTimer_combine(Note* notes, Instrument* instruments, uint8_t num){
 	/*
 	inputs: notes - list of note objects. first note must 
@@ -118,6 +118,11 @@ void FrequencyTimer_setNum(uint8_t num){
 
 void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
-	// uint16_t mag = FrequencyTimer_combine(myNotes, myInstruments, myNum); 
-	// DAC_Out(mag);
+	// two(notes[0].periodCycles, notes[1].periodCycles);
+	static int8_t ind = 0;
+	int8_t size = 32;
+	ind = (ind + 1) % size;
+	DAC_Out(myNotes->dynamicPercent * myInstruments[0].waveForm[ind] / 100);
+	//uint16_t mag = FrequencyTimer_combine(myNotes, myInstruments, myNum); 
+	//DAC_Out(mag);
 }
