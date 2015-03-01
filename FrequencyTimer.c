@@ -41,8 +41,8 @@ long StartCritical (void);    // previous I bit, disable interrupts
 void EndCritical(long sr);    // restore I bit to previous value
 void WaitForInterrupt(void);  // low power mode
 void (*PeriodicTask)(void);   // user function
-Note* myNotes;
-Instrument* myInstruments;
+Note* myNote;
+Instrument* myInstrument;
 uint8_t myNum;
 
 // ***************** FrequencyTimer_Init ****************
@@ -107,10 +107,10 @@ uint16_t FrequencyTimer_combine(Note* notes, Instrument* instruments, uint8_t nu
 }
 	
 void FrequencyTimer_setNotes(Note* notes){
-	myNotes = notes;
+	myNote = notes;
 }
 void FrequencyTimer_setInstruments(Instrument* instruments){
-	myInstruments = instruments;
+	myInstrument = instruments;
 }
 void FrequencyTimer_setNum(uint8_t num){
 	myNum = num;
@@ -122,7 +122,5 @@ void Timer0A_Handler(void){
 	static int8_t ind = 0;
 	int8_t size = 32;
 	ind = (ind + 1) % size;
-	DAC_Out(myNotes->dynamicPercent * myInstruments[0].waveForm[ind] / 100);
-	//uint16_t mag = FrequencyTimer_combine(myNotes, myInstruments, myNum); 
-	//DAC_Out(mag);
+	DAC_Out(myNote->dynamicPercent * myInstrument->waveForm[ind] / 100);
 }

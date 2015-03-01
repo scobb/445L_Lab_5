@@ -38,6 +38,7 @@
 #define MAX 4095
 // define the period at 120 beats per minute, refreshing each 12th note
 #define PERIOD_BPM_120_12 3333333
+#define PERIOD_BPM_400_12 666667
 // 12-bit 32-element sine wave
 // multiply each value by 2 to shift into bits 12:1 of SSI packet
 // three control bits in 15:13 are all zero for immediate DAC update
@@ -52,7 +53,7 @@ int main(void){
 	Heartbeat_Init();
 	//ButtonManager_Init();
 	FrequencyTimer_Init();
-	TempoTimer_Init(PERIOD_BPM_120_12);
+	TempoTimer_Init(PERIOD_BPM_400_12);
 	DAC_Init(MAX/2);
 	FrequencyTimer_arm(C5);
 	while (1);
