@@ -118,6 +118,14 @@ void FrequencyTimer_setNum(uint8_t num){
 	myNum = num;
 }
 
+void FrequencyTimer_getNotes(Note** notes){
+	*notes = myNote;
+}
+
+void FrequencyTimer_getInstruments(Instrument** instruments){
+	*instruments = myInstrument;
+}
+
 void Timer0A_Handler(void){
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer0A timeout
 	// two(notes[0].periodCycles, notes[1].periodCycles);

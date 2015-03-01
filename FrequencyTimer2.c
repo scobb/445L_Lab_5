@@ -31,12 +31,12 @@ void FrequencyTimer2_Init(){
 	TIMER2_CTL_R = 0x00000000;
   TIMER2_CFG_R = 0x00000000;       // 2) configure for 32-bit timer mode
   TIMER2_TAMR_R = 0x00000002;      // 3) configure for periodic mode, default down-count settings
-  TIMER2_TAPR_R = 0;               // 5) 12.5ns timer0A
-  TIMER2_ICR_R = 0x00000001;       // 6) clear timer0A timeout flag
+  TIMER2_TAPR_R = 0;               // 5) 12.5ns timer2A
+  TIMER2_ICR_R = 0x00000001;       // 6) clear timer2A timeout flag
 	TIMER2_IMR_R = 0x00000001;    // 7) arm timeout interrupt
   NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF)|0x60000000; // 8) priority 3
   NVIC_EN0_R = NVIC_EN0_INT23;     // 9) enable interrupt 23 in NVIC
-  TIMER2_CTL_R |= 0x00000001;      // 10) enable timer0A
+  TIMER2_CTL_R |= 0x00000001;      // 10) enable timer2A
   EndCritical(sr);
 }
 
@@ -69,6 +69,14 @@ void FrequencyTimer2_setInstruments(Instrument* instruments){
 }
 void FrequencyTimer2_setNum(uint8_t num){
 	myNum2 = num;
+}
+
+void FrequencyTimer2_getNotes(Note** notes){
+	*notes = myNote2;
+}
+
+void FrequencyTimer2_getInstruments(Instrument** instruments){
+	*instruments = myInstrument2;
 }
 
 void Timer2A_Handler(void){

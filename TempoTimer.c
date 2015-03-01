@@ -2,6 +2,7 @@
 #include "inc/tm4c123gh6pm.h"
 #include "MusicDriver.h"
 #include "FrequencyTimer.h"
+#include "FrequencyTimer2.h"
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 long StartCritical (void);    // previous I bit, disable interrupts
@@ -53,9 +54,12 @@ void Timer1A_Handler(void){
 		(*HeartbeatTask)();
 	}
 	Note* currentNote;
+	Note* currentBassNote;
 	Instrument* currentInstrument;
+	Instrument* currentBassInstrument;
 	sr = StartCritical();
 	MusicDriver_getMelody(&currentNote, &currentInstrument);
+	MusicDriver_getBass(&currentBassNote, &currentBassInstrument);
 	FrequencyTimer_setNotes(currentNote);
 	FrequencyTimer_setInstruments(currentInstrument);
 	FrequencyTimer_setNum(1);

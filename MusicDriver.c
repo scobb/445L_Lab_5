@@ -205,8 +205,11 @@ Instrument synth = {
 uint32_t ind;
 uint32_t bass_ind;
 uint32_t tag_ind;
-uint32_t currentDuration = 0;
-uint32_t tagCurrentDuration = 0;
+uint32_t tag_bass_ind;
+uint32_t currentMelodyDuration = 0;
+uint32_t currentBassDuration = 0;
+uint32_t tagCurrentMelodyDuration = 0;
+uint32_t tagCurrentBassDuration = 0;
 uint8_t onTag = FALSE;
 uint8_t doubleTime = FALSE;
 void MusicDriver_Init(void){
@@ -218,6 +221,7 @@ void MusicDriver_reset(void){
 	ind = 0;
 	bass_ind = 0;
 }
+/*
 void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 	static int currentDuration = 0;
 	if (currentDuration > bass[ind].duration12thnotes){
@@ -229,6 +233,7 @@ void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 	*currentNote = &bass[ind];
 	*currentInstrument = &synth;
 }
+*/
 void MusicDriver_setDoubleTime(uint8_t val){
 	doubleTime = val;
 	if (val == TRUE){
@@ -238,7 +243,8 @@ void MusicDriver_setDoubleTime(uint8_t val){
 
 void MusicDriver_playTag(){
 	onTag = TRUE;
-	currentDuration = 0;
+	currentMelodyDuration = 0;
+	currentBassDuration = 0;
 }
 void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 	/*
@@ -253,8 +259,8 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 		if (doubleTime){
 			comp_val /= 2;
 		}
-		if (currentDuration > comp_val){
-			currentDuration = 0;
+		if (currentMelodyDuration > comp_val){
+			currentMelodyDuration = 0;
 			ind = (ind + 1);
 			if (ind == SIZE){
 				doubleTime = FALSE;
@@ -264,14 +270,14 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 				return;
 			}
 		} else {
-			++currentDuration;
+			++currentMelodyDuration;
 		}
 		*currentNote = &music[ind];
 		*currentInstrument = &synth;
 	} else {
 		//if (currentDuration > music[ind].duration12thnotes){
-		if (tagCurrentDuration > tag_mel[tag_ind].duration12thnotes){
-			tagCurrentDuration = 0;
+		if (tagCurrentMelodyDuration > tag_mel[tag_ind].duration12thnotes){
+			tagCurrentMelodyDuration = 0;
 			tag_ind = (tag_ind + 1);
 			if (tag_ind == MEL_TAG_SIZE){
 				tag_ind = 0;
@@ -280,10 +286,57 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 				MusicDriver_getMelody(currentNote, currentInstrument);
 			}
 		} else {
-			++tagCurrentDuration;
+			++tagCurrentMelodyDuration;
 		}
 		//*currentNote = &music[ind];
 		*currentNote = &tag_mel[tag_ind];
+		*currentInstrument = &synth;
+		
+	}
+}
+
+void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
+	/*
+	i/o parameters -
+		currentNotes - pointer to a pointer to be populated with a list of the notes currently playing
+	  currentInstruments - pointer to a pointer to be populated with a list of the instruments currently playing
+	output:
+		number of elements in the above arrays
+	*/
+	if (!onTag){
+		int32_t comp_val = bass[ind].duration12thnotes;
+		if (doubleTime){
+			comp_val /= 2;
+		}
+		if (currentBassDuration > comp_val){
+			currentBassDuration = 0;
+			ind = (ind + 1);
+			if (ind == BASS_SIZE){
+				doubleTime = FALSE;
+				*currentNote = &bass[0];
+				*currentInstrument = &synth;
+				ind = 0;
+				return;
+			}
+		} else {
+			++currentBassDuration;
+		}
+		*currentNote = &bass[ind];
+		*currentInstrument = &synth;
+	} else {
+		if (tagCurrentBassDuration > bass_tag[tag_bass_ind].duration12thnotes){
+			tagCurrentBassDuration = 0;
+			tag_bass_ind = (tag_bass_ind + 1);
+			if (tag_bass_ind == BASS_TAG_SIZE){
+				tag_bass_ind = 0;
+				onTag = FALSE;
+				doubleTime = TRUE;
+				MusicDriver_getBass(currentNote, currentInstrument);
+			}
+		} else {
+			++tagCurrentBassDuration;
+		}
+		*currentNote = &bass_tag[tag_bass_ind];
 		*currentInstrument = &synth;
 		
 	}
