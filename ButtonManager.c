@@ -3,6 +3,7 @@
 #include "SysTick.h"
 #include "TempoTimer.h"
 #include "FrequencyTimer.h"
+#include "FrequencyTimer2.h"
 #include "MusicDriver.h"
 #include <stdint.h>
 uint8_t isPlaying, isFast;

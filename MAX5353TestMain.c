@@ -31,6 +31,7 @@
 #include "SysTick.h"
 #include "ButtonManager.h"
 #include "FrequencyTimer.h"
+#include "FrequencyTimer2.h"
 #include "TempoTimer.h"
 #include "Heartbeat.h"
 #include "PLL.h"
@@ -53,6 +54,7 @@ int main(void){
 	Heartbeat_Init();
 	ButtonManager_Init();
 	FrequencyTimer_Init();
+	FrequencyTimer2_Init();
 	TempoTimer_Init(PERIOD_BPM_400_12);
 	DAC_Init(MAX/2);
 	//FrequencyTimer_arm(C5);
