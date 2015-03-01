@@ -70,5 +70,5 @@ void Timer1A_Handler(void){
 	EndCritical(sr);
 	FrequencyTimer_arm(currentNote->periodCycles);
 	FrequencyTimer2_arm(currentBassNote->periodCycles);
-	MixerTimer_arm((currentBassNote->periodCycles)*2);
+	MixerTimer_arm((currentNote->periodCycles)*2);
 }

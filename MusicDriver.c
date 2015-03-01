@@ -201,6 +201,10 @@ Instrument synth = {
   2048,2448,2832,3186,3496,3751,3940,4057,4095,4057,3940,
   3751,3496,3186,2832,2448,2048,1648,1264,910,600,345,
   156,39,0,39,156,345,600,910,1264,1648};
+Instrument electricGuitar = {
+	2400,2048,1664,1664,1830,1900,2300,1984,
+	1664,1344,1024,768,512,256,0,256,512,768,1024,1344,1664,
+	1984,2300,2700,3072,3413,3755,4095,3755,3413,3072,2700};
 
 uint32_t ind;
 uint32_t bass_ind;
@@ -274,7 +278,7 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 			++currentMelodyDuration;
 		}
 		*currentNote = &music[ind];
-		*currentInstrument = &synth;
+		*currentInstrument = &electricGuitar;//&synth;
 	} else {
 		//if (currentDuration > music[ind].duration12thnotes){
 		if (tagCurrentMelodyDuration > tag_mel[tag_ind].duration12thnotes){
@@ -291,7 +295,7 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 		}
 		//*currentNote = &music[ind];
 		*currentNote = &tag_mel[tag_ind];
-		*currentInstrument = &synth;
+		*currentInstrument = &electricGuitar;//&synth;
 		
 	}
 }
