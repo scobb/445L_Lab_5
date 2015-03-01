@@ -4,6 +4,7 @@
 #include "TempoTimer.h"
 #include "FrequencyTimer.h"
 #include "FrequencyTimer2.h"
+#include "Mixer_Timer.h"
 #include "MusicDriver.h"
 #include <stdint.h>
 uint8_t isPlaying, isFast;
@@ -72,10 +73,14 @@ void playPressed(){
 	if (isPlaying){
 		TempoTimer_disarm();
 		FrequencyTimer_disarm();
+		FrequencyTimer2_disarm();
+		MixerTimer_disarm();
 		isPlaying = FALSE;
 	} else {
 		TempoTimer_arm();
 		FrequencyTimer_arm(0);
+		FrequencyTimer2_arm(0);
+		MixerTimer_arm(0);
 		isPlaying = TRUE;
 	}
 }

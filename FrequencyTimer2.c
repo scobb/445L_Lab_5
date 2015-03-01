@@ -17,6 +17,7 @@ void (*PeriodicTask2)(void);   // user function
 Note* myNote2;
 Instrument* myInstrument2;
 uint8_t myNum2;
+uint8_t wavePos2;
 
 // ***************** FrequencyTimer_Init ****************
 // Activate Timer0A interrupts to run user task periodically
@@ -79,11 +80,16 @@ void FrequencyTimer2_getInstruments(Instrument** instruments){
 	*instruments = myInstrument2;
 }
 
+void FrequencyTimer2_getPosition(uint8_t* position){
+	*position = wavePos2;
+}
+
 void Timer2A_Handler(void){
   TIMER2_ICR_R = TIMER_ICR_TATOCINT;// acknowledge timer2A timeout
 	// two(notes[0].periodCycles, notes[1].periodCycles);
 	static int8_t ind = 0;
 	int8_t size = 32;
 	ind = (ind + 1) % size;
-	DAC_Out(myNote2->dynamicPercent * myInstrument2->waveForm[ind] / 100);
+	wavePos2 = ind;
+	//DAC_Out(myNote2->dynamicPercent * myInstrument2->waveForm[ind] / 100);
 }

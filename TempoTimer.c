@@ -3,6 +3,7 @@
 #include "MusicDriver.h"
 #include "FrequencyTimer.h"
 #include "FrequencyTimer2.h"
+#include "Mixer_Timer.h"
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 long StartCritical (void);    // previous I bit, disable interrupts
@@ -63,6 +64,11 @@ void Timer1A_Handler(void){
 	FrequencyTimer_setNotes(currentNote);
 	FrequencyTimer_setInstruments(currentInstrument);
 	FrequencyTimer_setNum(1);
+	FrequencyTimer2_setNotes(currentBassNote);
+	FrequencyTimer2_setInstruments(currentBassInstrument);
+	FrequencyTimer2_setNum(1);
 	EndCritical(sr);
 	FrequencyTimer_arm(currentNote->periodCycles);
+	FrequencyTimer2_arm(currentBassNote->periodCycles);
+	MixerTimer_arm((currentBassNote->periodCycles)*2);
 }

@@ -216,6 +216,7 @@ void MusicDriver_Init(void){
 	ind = 0;
 	bass_ind = 0;
 	tag_ind = 0;
+	tag_bass_ind = 0;
 }
 void MusicDriver_reset(void){
 	ind = 0;
@@ -310,18 +311,18 @@ void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 		}
 		if (currentBassDuration > comp_val){
 			currentBassDuration = 0;
-			ind = (ind + 1);
-			if (ind == BASS_SIZE){
+			bass_ind = (bass_ind + 1);
+			if (bass_ind == BASS_SIZE){
 				doubleTime = FALSE;
 				*currentNote = &bass[0];
 				*currentInstrument = &synth;
-				ind = 0;
+				bass_ind = 0;
 				return;
 			}
 		} else {
 			++currentBassDuration;
 		}
-		*currentNote = &bass[ind];
+		*currentNote = &bass[bass_ind];
 		*currentInstrument = &synth;
 	} else {
 		if (tagCurrentBassDuration > bass_tag[tag_bass_ind].duration12thnotes){

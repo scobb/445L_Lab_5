@@ -32,6 +32,7 @@
 #include "ButtonManager.h"
 #include "FrequencyTimer.h"
 #include "FrequencyTimer2.h"
+#include "Mixer_Timer.h"
 #include "TempoTimer.h"
 #include "Heartbeat.h"
 #include "PLL.h"
@@ -55,6 +56,7 @@ int main(void){
 	ButtonManager_Init();
 	FrequencyTimer_Init();
 	FrequencyTimer2_Init();
+	MixerTimer_Init();
 	TempoTimer_Init(PERIOD_BPM_400_12);
 	DAC_Init(MAX/2);
 	//FrequencyTimer_arm(C5);

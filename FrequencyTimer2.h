@@ -15,6 +15,7 @@ void FrequencyTimer2_setInstruments(Instrument* instruments);
 void FrequencyTimer2_setNum(uint8_t num);
 void FrequencyTimer2_getNotes(Note** notes);
 void FrequencyTimer2_getInstruments(Instrument** instruments);
+void FrequencyTimer2_getPosition(uint8_t* position);
 void FrequencyTimer2_arm(uint32_t periodCycles);
 void FrequencyTimer2_disarm();
 #endif // __TIMER2AINTS_H__
