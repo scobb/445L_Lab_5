@@ -7,5 +7,5 @@ void MusicDriver_Init(void);
 void MusicDriver_reset(void);
 void MusicDriver_getMelody(Note** currentNotes, Instrument** currentInstruments);
 void MusicDriver_getBass(Note** currentNotes, Instrument** currentInstruments);
-
+void MusicDriver_setDoubleTime(uint8_t val);
 #endif

@@ -20,7 +20,7 @@ void TempoTimer_Init(uint32_t period){long sr; int delay;
   TIMER1_TAILR_R = period-1;       // 4) reload value
   TIMER1_TAPR_R = 0;               // 5) 12.5ns TIMER1A
   TIMER1_ICR_R = 0x00000001;       // 6) clear TIMER1A timeout flag
-  TIMER1_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
+  // TIMER1_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
   NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF1FFF)|0x00004000; // 8) priority 2
   NVIC_EN0_R |= NVIC_EN0_INT21;     // 9) enable interrupt 19 in NVIC
   TIMER1_CTL_R |= 0x00000001;      // 10) enable TIMER1A

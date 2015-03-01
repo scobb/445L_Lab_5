@@ -55,6 +55,6 @@ int main(void){
 	FrequencyTimer_Init();
 	TempoTimer_Init(PERIOD_BPM_400_12);
 	DAC_Init(MAX/2);
-	FrequencyTimer_arm(C5);
+	//FrequencyTimer_arm(C5);
 	while (1);
 }

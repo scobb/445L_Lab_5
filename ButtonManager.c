@@ -29,19 +29,19 @@ void ButtonManager_Init(){
 	isFast = FALSE;
   // GPIO_PORTD_LOCK_R = GPIO_LOCK_KEY;   // Not using PD7 so don't need to unlock
   // GPIO_PORTD_CR_R |= 0x4C;           // Don't need to unlock PD7
-  GPIO_PORTD_AFSEL_R &= ~0x4C;        // 6) disable alt funct on PD1-0
-  GPIO_PORTD_DIR_R &= ~0x0C;          // 5) PD1-0 are in
-	GPIO_PORTD_DIR_R |= 0x40;
-  GPIO_PORTD_AMSEL_R &= ~0x4C;        // 3) disable analog on PD
-  GPIO_PORTD_PUR_R |= 0x0C;          // enable pull-up on PD
-  GPIO_PORTD_DEN_R |= 0x4C;          // 7) enable digital I/O on PD
-  GPIO_PORTD_PCTL_R &= ~0x0F00FF00; // configure PD1-0 as GPIO
+  GPIO_PORTD_AFSEL_R &= ~0x4D;        // 6) disable alt funct on PD1-0
+  GPIO_PORTD_DIR_R &= ~0x0D;         // 5) PD1-0 are in
+  GPIO_PORTD_DIR_R |= 0x40;          // 5) PD1-0 are in
+  GPIO_PORTD_AMSEL_R &= ~0x4D;        // 3) disable analog on PD
+  GPIO_PORTD_PUR_R |= 0x4D;          // enable pull-up on PD
+  GPIO_PORTD_DEN_R |= 0x4D;          // 7) enable digital I/O on PD
+  GPIO_PORTD_PCTL_R &= ~0x0F00FF0F; // configure PD1-0 as GPIO
 	
-  GPIO_PORTD_IS_R &= ~0x0C;     // (d) PD0, 1 is edge-sensitive
-  GPIO_PORTD_IBE_R &= ~0x0C;    //     PD0, 1 is not both edges
-  GPIO_PORTD_IEV_R &= ~0x0C;    //     PD0, 1 falling edge event
-  GPIO_PORTD_ICR_R = 0x0C;      // (e) clear flag4
-  GPIO_PORTD_IM_R |= 0x0C;      // (f) arm interrupt on PD1-0 *** No IME bit as mentioned in Book ***
+  GPIO_PORTD_IS_R &= ~0x0D;     // (d) PD0, 1 is edge-sensitive
+  GPIO_PORTD_IBE_R &= ~0x0D;    //     PD0, 1 is not both edges
+  GPIO_PORTD_IEV_R &= ~0x0D;    //     PD0, 1 falling edge event
+  GPIO_PORTD_ICR_R = 0x0D;      // (e) clear flag4
+  GPIO_PORTD_IM_R |= 0x0D;      // (f) arm interrupt on PD1-0 *** No IME bit as mentioned in Book ***
   NVIC_PRI0_R = (NVIC_PRI0_R&0x0FFFFFFF)|0x80000000; // (g) priority 4
   NVIC_EN0_R |= NVIC_EN0_INT3;      // (h) enable interrupt 19 in NVIC
 	
@@ -86,9 +86,11 @@ void rewindPressed(){
 void modePressed(){
 	// adjust tempo
 	if (!isFast) {
-		// TempoTimer_init(PERIOD_BPM_240_12);
+		MusicDriver_setDoubleTime(TRUE);
+		isFast = TRUE;
 	} else {
-		// TempoTimer_init(PERIOD_BPM_120_12);
+		MusicDriver_setDoubleTime(FALSE);
+		isFast = FALSE;
 	}
 }
 
@@ -102,7 +104,7 @@ void GPIOPortD_Handler(void){
 	buttonStatus ports[3] = {
 		{PD2, FALSE, &playPressed},
 		{PD3, FALSE, &rewindPressed},
-		{PD6, FALSE ,&modePressed}
+		{PD0, FALSE ,&modePressed}
 	};
 	
 	// check all ports to see if any is low

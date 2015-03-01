@@ -1,9 +1,25 @@
 #include "MusicDriver.h"
 #include "Note.h"
 Note* currentNote;
-
+#define TRUE 1
+#define FALSE 0
+#define BASS_TAG_SIZE 9
+Note bass_tag[BASS_TAG_SIZE] = {
+{Aflat4, 12, 0},{Aflat4, 60, 100},{A4, 12, 0},{A4, 60, 100},
+{Bflat4, 12, 0},{Bflat4, 60, 100},{B4, 12, 100},{B4,12,0},{B4,85,100}};
+#define MEL_TAG_SIZE 36
+Note tag_mel[MEL_TAG_SIZE] = {
+{Aflat3, 8, 100},{Aflat3, 4, 0},{D5, 8, 100},{D5, 4, 0},
+{E5, 12, 0},{D5, 8, 100},{D5, 4, 0},{D5, 8, 100},
+{D5, 4, 0},{E5, 12, 0},{A3, 8, 100},{A3, 4, 0},
+{Eflat5, 8, 100},{Eflat5, 4, 0},{E5, 12, 0},{Eflat5, 8, 100},
+{Eflat5, 4, 0},{Eflat5, 8, 100},{Eflat5, 4, 0},{E5, 12, 0},
+{Bflat3, 8, 100},{Bflat3, 4, 0},{E5, 8, 100},{E5, 4, 0},
+{E5, 12, 0},{E5, 8, 100},{E5, 4, 0},{E5, 8, 100},
+{E5, 4, 0},{E5, 12, 0},{F5, 8, 100},{F5, 4, 0},
+{E5, 12, 0},{F5, 8, 100},{F5, 4, 0},{F5, 84, 100},};
 #define SIZE 308
-Note music[308] = {
+Note music[SIZE] = {
 {E5, 8, 100},{E5, 4, 0},{E5, 8, 100},{E5, 4, 0},
 {E5, 12, 0},{E5, 8, 100},{E5, 4, 0},{E5, 12, 0},
 {C5, 8, 100},{C5, 4, 0},{E5, 8, 100},{E5, 4, 0},
@@ -83,7 +99,7 @@ Note music[308] = {
 {E5, 12, 0},{G3, 8, 100},{G3, 4, 0},{E5, 12, 0},};
 
 #define BASS_SIZE 384
-Note bass[384] = {
+Note bass[BASS_SIZE] = {
 {D3, 8, 100},{D3, 4, 0},{D3, 8, 100},{D3, 4, 0},
 {E5, 12, 0},{D3, 8, 100},{D3, 4, 0},{E5, 12, 0},
 {D3, 8, 100},{D3, 4, 0},{D3, 8, 100},{D3, 4, 0},
@@ -186,7 +202,11 @@ Instrument synth = {
   3751,3496,3186,2832,2448,2048,1648,1264,910,600,345,
   156,39,0,39,156,345,600,910,1264,1648};
 
-uint32_t ind, bass_ind;
+uint32_t ind;
+uint32_t bass_ind;
+uint32_t currentDuration = 0;
+uint8_t onTag = FALSE;
+uint8_t doubleTime = FALSE;
 void MusicDriver_Init(void){
 	ind = 0;
 	bass_ind = 0;
@@ -206,6 +226,13 @@ void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 	*currentNote = &bass[ind];
 	*currentInstrument = &synth;
 }
+void MusicDriver_setDoubleTime(uint8_t val){
+	doubleTime = val;
+}
+void MusicDriver_playTag(){
+	onTag = TRUE;
+	currentDuration = 0;
+}
 void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 	/*
 	i/o parameters -
@@ -214,13 +241,40 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 	output:
 		number of elements in the above arrays
 	*/
-	static int currentDuration = 0;
-	if (currentDuration > music[ind].duration12thnotes){
-		currentDuration = 0;
-		ind = (ind + 1) % SIZE;
+	if (!onTag){
+		int32_t comp_val = music[ind].duration12thnotes;
+		if (doubleTime){
+			comp_val /= 2;
+		}
+		if (currentDuration > comp_val){
+			currentDuration = 0;
+			ind = (ind + 1);
+			if (ind == SIZE){
+				doubleTime = FALSE;
+				*currentNote = &music[0];
+				*currentInstrument = &synth;
+				ind = 0;
+				return;
+			}
+		} else {
+			++currentDuration;
+		}
+		*currentNote = &music[ind];
+		*currentInstrument = &synth;
 	} else {
-		++currentDuration;
+		if (currentDuration > music[ind].duration12thnotes){
+			currentDuration = 0;
+			ind = (ind + 1);
+			if (ind == MEL_TAG_SIZE){
+				onTag = FALSE;
+				doubleTime = TRUE;
+				MusicDriver_getMelody(currentNote, currentInstrument);
+			}
+		} else {
+			++currentDuration;
+		}
+		*currentNote = &music[ind];
+		*currentInstrument = &synth;
+		
 	}
-	*currentNote = &music[ind];
-	*currentInstrument = &synth;
 }
