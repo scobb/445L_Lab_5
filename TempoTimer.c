@@ -30,6 +30,22 @@ void TempoTimer_setHeartbeatTask(void(*task)(void)){
 	HeartbeatTask = task;
 }
 
+void TempoTimer_disarm(){
+	long sr = StartCritical();
+  TIMER1_CTL_R &= ~0x00000001;     // 1) disable TIMER1A during setup
+  TIMER1_IMR_R &= ~(0x00000001);      // 7) disarm timeout interrupt
+  TIMER1_CTL_R |= 0x00000001;      // 10) enable TIMER1A
+	EndCritical(sr);
+}
+
+void TempoTimer_arm(){
+	long sr = StartCritical();
+  TIMER1_CTL_R &= ~0x00000001;     // 1) disable TIMER1A during setup
+  TIMER1_IMR_R |= 0x00000001;      // 7) arm timeout interrupt
+  TIMER1_CTL_R |= 0x00000001;      // 10) enable TIMER1A
+	EndCritical(sr);
+}
+
 void Timer1A_Handler(void){
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER1A timeout
 	long sr;
@@ -39,10 +55,10 @@ void Timer1A_Handler(void){
 	Note* currentNote;
 	Instrument* currentInstrument;
 	sr = StartCritical();
-	uint8_t num = MusicDriver_getNextTimeStep(&currentNote, &currentInstrument);
+	MusicDriver_getMelody(&currentNote, &currentInstrument);
 	FrequencyTimer_setNotes(currentNote);
 	FrequencyTimer_setInstruments(currentInstrument);
-	FrequencyTimer_setNum(num);
+	FrequencyTimer_setNum(1);
 	EndCritical(sr);
 	FrequencyTimer_arm(currentNote->periodCycles);
 }

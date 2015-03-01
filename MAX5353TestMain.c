@@ -48,10 +48,10 @@
 //                 wave[n] = 0x1FFE (LSB = 0), output = 2*Vref
 
 int main(void){
-	// SysTick_Init();
+	SysTick_Init();
 	PLL_Init();
 	Heartbeat_Init();
-	//ButtonManager_Init();
+	ButtonManager_Init();
 	FrequencyTimer_Init();
 	TempoTimer_Init(PERIOD_BPM_400_12);
 	DAC_Init(MAX/2);

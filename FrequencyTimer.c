@@ -68,7 +68,9 @@ void FrequencyTimer_Init(){
 void FrequencyTimer_arm(uint32_t periodCycles){
 	long sr = StartCritical();
   TIMER0_CTL_R &= ~0x00000001;     		// 1) disable timer0A during setup
-  TIMER0_TAILR_R = periodCycles-1;    // 4) reload value
+	if (periodCycles != 0){
+		TIMER0_TAILR_R = periodCycles-1;    // 4) reload value
+	}
   TIMER0_ICR_R = TIMER_ICR_TATOCINT;	// 6) clear timer0A timeout flag
   TIMER0_IMR_R |= 0x00000001;      		// 7) arm timeout interrupt
   TIMER0_CTL_R |= 0x00000001;     		// 8) enable timer0A

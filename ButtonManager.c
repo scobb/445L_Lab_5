@@ -1,6 +1,9 @@
 #include "ButtonManager.h"
 #include "inc/tm4c123gh6pm.h"
 #include "SysTick.h"
+#include "TempoTimer.h"
+#include "FrequencyTimer.h"
+#include "MusicDriver.h"
 #include <stdint.h>
 uint8_t isPlaying, isFast;
 long StartCritical (void);    // previous I bit, disable interrupts
@@ -66,16 +69,18 @@ void CheckDebounce(buttonStatus* buttons, uint8_t numPorts){
 void playPressed(){
 	// determine action dependent on current state. Update state.
 	if (isPlaying){
-		// TempoTimer_disarm();
-		// FrequencyTimer_disarm();
+		TempoTimer_disarm();
+		FrequencyTimer_disarm();
+		isPlaying = FALSE;
 	} else {
-		// TempoTimer_arm();
-		// FrequencyTimer_arm();
+		TempoTimer_arm();
+		FrequencyTimer_arm(0);
+		isPlaying = TRUE;
 	}
 }
 void rewindPressed(){
 	// move song back to beginning
-	// MusicDriver_reset();
+	MusicDriver_reset();
 	
 }
 void modePressed(){
@@ -95,9 +100,9 @@ void GPIOPortD_Handler(void){
 	
 	// TODO - store these in a "member" hash table updated by setHandler method
 	buttonStatus ports[3] = {
-		{PD0, FALSE, &playPressed},
-		{PD2, FALSE, &rewindPressed},
-		{PD3, FALSE ,&modePressed}
+		{PD2, FALSE, &playPressed},
+		{PD3, FALSE, &rewindPressed},
+		{PD6, FALSE ,&modePressed}
 	};
 	
 	// check all ports to see if any is low
