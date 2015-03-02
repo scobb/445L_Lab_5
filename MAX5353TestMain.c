@@ -34,6 +34,7 @@
 #include "FrequencyTimer2.h"
 #include "Mixer_Timer.h"
 #include "TempoTimer.h"
+#include "MusicDriver.h"
 #include "Heartbeat.h"
 #include "PLL.h"
 #include "Note.h"
@@ -57,7 +58,8 @@ int main(void){
 	FrequencyTimer_Init();
 	FrequencyTimer2_Init();
 	MixerTimer_Init();
-	TempoTimer_Init(PERIOD_BPM_400_12);
+	TempoTimer_Init(PERIOD_BPM_120_12);
+	MusicDriver_Init();
 	DAC_Init(MAX/2);
 	//FrequencyTimer_arm(C5);
 	while (1);

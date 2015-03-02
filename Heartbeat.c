@@ -8,8 +8,8 @@
 void blinkHeartbeat(){
 	static int count = 0;
 	count = (count + 1) % 12;
-	if (count == 0)
-		LED ^= 0x02;
+	//if (count == 0)
+		//LED ^= 0x02;
 }
 
 void Heartbeat_Init(){

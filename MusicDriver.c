@@ -1,8 +1,11 @@
 #include "MusicDriver.h"
 #include "Note.h"
+#include "inc/tm4c123gh6pm.h"
 Note* currentNote;
 #define TRUE 1
 #define FALSE 0
+#define PD1       (*((volatile uint32_t *)0x40007008))
+#define LED (*((volatile uint32_t *)0x40025008)) //Uses PF1. Looks like mainly for colors (1=red)
 #define BASS_TAG_SIZE 9
 Note bass_tag[BASS_TAG_SIZE] = {
 {Aflat4, 12, 0},{Aflat4, 60, 100},{A4, 12, 0},{A4, 60, 100},
@@ -98,14 +101,14 @@ Note music[SIZE] = {
 {A4, 8, 100},{A4, 4, 0},{G4, 8, 100},{G4, 4, 0},
 {E5, 12, 0},{G3, 8, 100},{G3, 4, 0},{E5, 12, 0},};
 
-#define BASS_SIZE 384
+#define BASS_SIZE 383
 Note bass[BASS_SIZE] = {
 {D3, 8, 100},{D3, 4, 0},{D3, 8, 100},{D3, 4, 0},
 {E5, 12, 0},{D3, 8, 100},{D3, 4, 0},{E5, 12, 0},
 {D3, 8, 100},{D3, 4, 0},{D3, 8, 100},{D3, 4, 0},
 {E5, 12, 0},{E5, 12, 0},{E5, 12, 0},{E5, 12, 0},
 {E5, 12, 0},{G3, 8, 100},{G3, 4, 0},{E5, 12, 0},
-{E5, 12, 0},{E5, 12, 0},{E5, 12, 0},{G3, 8, 100},
+{E5, 12, 0},{E5, 12, 0},{G3, 8, 100},
 {G3, 4, 0},{E5, 12, 0},{E5, 12, 0},{E3, 8, 100},
 {E3, 4, 0},{E5, 12, 0},{E5, 12, 0},{C2, 8, 100},
 {C2, 4, 0},{E5, 12, 0},{E5, 12, 0},{F3, 8, 100},
@@ -217,6 +220,12 @@ uint32_t tagCurrentBassDuration = 0;
 uint8_t onTag = FALSE;
 uint8_t doubleTime = FALSE;
 void MusicDriver_Init(void){
+	GPIO_PORTD_CR_R |= 0x02;           // allow changes to PD1
+	GPIO_PORTD_DIR_R |= 0x02;          // 5) PD1 are out
+	GPIO_PORTD_AFSEL_R &= ~0x02;        // 6) disable alt funct on PD1
+	GPIO_PORTD_AMSEL_R &= ~0x02;        // 3) disable analog on PD
+	GPIO_PORTD_DEN_R |= 0x02;         // 7) enable digital I/O on PD
+	
 	ind = 0;
 	bass_ind = 0;
 	tag_ind = 0;
@@ -225,6 +234,8 @@ void MusicDriver_Init(void){
 void MusicDriver_reset(void){
 	ind = 0;
 	bass_ind = 0;
+	tag_ind = 0;
+	tag_bass_ind = 0;
 }
 /*
 void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
@@ -265,6 +276,7 @@ void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 			comp_val /= 2;
 		}
 		if (currentMelodyDuration > comp_val){
+			LED ^= 0x02;
 			currentMelodyDuration = 0;
 			ind = (ind + 1);
 			if (ind == SIZE){
@@ -309,11 +321,12 @@ void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 		number of elements in the above arrays
 	*/
 	if (!onTag){
-		int32_t comp_val = bass[ind].duration12thnotes;
+		int32_t comp_val = bass[bass_ind].duration12thnotes;
 		if (doubleTime){
 			comp_val /= 2;
 		}
 		if (currentBassDuration > comp_val){
+			PD1 ^= 0x02;
 			currentBassDuration = 0;
 			bass_ind = (bass_ind + 1);
 			if (bass_ind == BASS_SIZE){
