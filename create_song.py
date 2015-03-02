@@ -7,7 +7,7 @@ def determine_newline(num):
         return ''
 
 def main():
-    bass_list = 'D3,D3,r,D3,r,D3,D3,r,r,r,r,r,G3,r,r,r,r,' + \
+    bass_list = 'D3,D3,r,D3,r,D3,D3,r,r,r,r,r,G3,r,r,r,' + \
         'G3,r,r,E3,r,r,C2,r,r,F3,r,G3,r,Gflat3,F3,r,' + \
         'tE3,tC4,tE4,F4,r,D4,E4,r,C4,r,A3,B3,G3,r,r,' + \
         'G3,r,r,E3,r,r,C2,r,r,F3,r,G3,r,Gflat3,F3,r,' + \
@@ -23,27 +23,38 @@ def main():
         'Aflat2,Aflat4,r,Eflat3,r,Aflat4,Aflat3,r,G3,E4,r,C3,C4,r,r,r,' +\
         'Aflat2,Aflat4,r,Eflat3,r,Aflat4,Aflat3,r,r,r,r,r,r,r,r,r,' +\
         'Aflat2,Aflat4,r,Eflat3,r,Aflat4,Aflat3,r,G3,E4,r,C3,C4,r,r,r,' +\
-        'D3,D3,r,D3,r,D3,D3,r,r,r,r,r,G3,r,r,r,r,G3'
+        'D3,D3,r,D3,r,D3,D3,r,r,r,r,r,G3,r,r,r,G3'
 
 
     tag_mel = 'Aflat3,D5,r,D5,D5,r,A3,Eflat5,r,Eflat5,Eflat5,r,Bflat3,E5,r,E5,E5,r,F5,r,F5'
     tag_bass = 'Aflat4,A4,Bflat4'
 
     note_list = 'E5,E5,r,E5,r,C5,E5,r,G5,r,r,r,G4,r,r,r,' + \
-        'C5,r,r,G4,r,r,E4,r,r,A4,r,B4,r,Bflat4,A4,r,tG4,tE5,tG5,A5,r,F5,G5,r,E5,r,C5,D5,B4,r,r,' +\
-        'C5,r,r,G4,r,r,E4,r,r,A4,r,B4,r,Bflat4,A4,r,tG4,tE5,tG5,A5,r,F5,G5,r,E5,r,C5,D5,B4,r,r,' +\
-        'C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,C3,r,G5,Gflat5,F5,Eflat5,G3,E5,' + \
-        'r,C6,r,C6,C6,r,G3,r,C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,' +\
+        'C5,r,r,G4,r,r,E4,r,r,A4,r,B4,r,Bflat4,A4,r,' +\
+        'tG4,tE5,tG5,A5,r,F5,G5,r,E5,r,C5,D5,B4,r,r,' +\
+        'C5,r,r,G4,r,r,E4,r,r,A4,r,B4,r,Bflat4,A4,r,' +\
+        'tG4,tE5,tG5,A5,r,F5,G5,r,E5,r,C5,D5,B4,r,r,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,G3,E5,r,C6,r,C6,C6,r,G3,r,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,' +\
+        'C3,r,Eflat5,r,r,D5,r,r,C5,r,r,G3,G3,r,C3,r,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,G3,E5,r,C6,r,C6,C6,r,G3,r,' +\
+        'C3,r,G5,Gflat5,F5,Eflat5,C4,E5,F3,Aflat4,A4,C5,C4,A4,C5,D5,' +\
         'C3,r,Eflat5,r,r,D5,r,r,C5,r,r,G3,G3,r,C3,r,' +\
         'C5,C5,r,C5,r,C5,D5,r,E5,C5,r,A4,G4,r,G3,r,' +\
         'C5,C5,r,C5,r,C5,D5,E5,G3,r,r,C3,r,r,G2,r,' +\
         'C5,C5,r,C5,r,C5,D5,r,E5,C5,r,A4,G4,r,G3,r,' +\
         'E5,E5,r,E5,r,C5,E5,r,G5,r,r,r,G4,r,r,r,C5'
 
+    print('Parsing melody')
     parse(note_list, 'music')
+    print('Parsing bass')
     parse(bass_list, 'bass')
     parse_tag_bass(tag_bass)
     parse(tag_mel, 'tag_mel')
+    #print('len(bass_list.split(\',\'): ' + str(len(bass_list.split(','))))
+    #print('len(note_list.split(\',\'): ' + str(len(note_list.split(','))))
 
 
 def parse_tag_bass(notes):
@@ -64,23 +75,26 @@ def parse_tag_bass(notes):
     print(ret_val)
 
 
-
 def parse(notes, name):
     num = 0
+    duration = 0
     ret_val = '{'
     for note in notes.split(','):
         if num % 4 == 0:
             ret_val += '\n'
         if note == 'r':
+            duration += 12
             ret_val += '{E5, 12, 0},'
             num += 1
         elif note.startswith('t'):
+            duration += 16
             note = note.replace('t', '')
             num += 1
             sub = determine_newline(num)
             ret_val += '{%s, 12, 100},%s{%s, 4, 0},' % (note, sub, note)
             num += 1
         else:
+            duration += 12
             num += 1
             sub = determine_newline(num)
             ret_val += '{%s, 8, 100},%s{%s, 4, 0},' % (note, sub, note)
@@ -89,6 +103,7 @@ def parse(notes, name):
     ret_val += '};'
     ret_val = ('#define SIZE %d\nNote %s[%d] = ' % (num, name, num)) + ret_val
     print(ret_val)
+    print('duration: ' + str(duration))
 
 
 if __name__ == '__main__':
