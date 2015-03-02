@@ -1,5 +1,9 @@
 #include "MusicDriver.h"
 #include "Note.h"
+#include "FrequencyTimer.h"
+#include "FrequencyTimer2.h"
+#include "Mixer_Timer.h"
+#include "TempoTimer.h"
 #include "inc/tm4c123gh6pm.h"
 Note* currentNote;
 #define TRUE 1
@@ -250,6 +254,7 @@ Instrument electricGuitar = {
 	1664,1344,1024,768,512,256,0,256,512,768,1024,1344,1664,
 	1984,2300,2700,3072,3413,3755,4095,3755,3413,3072,2700};
 
+uint8_t done;
 uint32_t ind;
 uint32_t bass_ind;
 uint32_t tag_ind;
@@ -271,12 +276,14 @@ void MusicDriver_Init(void){
 	bass_ind = 0;
 	tag_ind = 0;
 	tag_bass_ind = 0;
+	done = FALSE;
 }
 void MusicDriver_reset(void){
 	ind = 0;
 	bass_ind = 0;
 	tag_ind = 0;
 	tag_bass_ind = 0;
+	done = FALSE;
 }
 /*
 void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
@@ -302,6 +309,10 @@ void MusicDriver_playTag(){
 	onTag = TRUE;
 	currentMelodyDuration = 0;
 	currentBassDuration = 0;
+}
+
+void MusicDriver_done(){
+	
 }
 void MusicDriver_getMelody(Note** currentNote, Instrument** currentInstrument){
 	/*
@@ -371,10 +382,16 @@ void MusicDriver_getBass(Note** currentNote, Instrument** currentInstrument){
 			currentBassDuration = 0;
 			bass_ind = (bass_ind + 1);
 			if (bass_ind == BASS_SIZE){
+				//Stopping everything here
+				FrequencyTimer_disarm();
+				FrequencyTimer2_disarm();
+				MixerTimer_disarm();
+				TempoTimer_disarm();
 				doubleTime = FALSE;
 				*currentNote = &bass[0];
 				*currentInstrument = &synth;
 				bass_ind = 0;
+				done = TRUE;
 				return;
 			}
 		} else {
