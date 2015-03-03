@@ -9,4 +9,5 @@ void MusicDriver_getMelody(Note** currentNotes, Instrument** currentInstruments)
 void MusicDriver_getBass(Note** currentNotes, Instrument** currentInstruments);
 void MusicDriver_setDoubleTime(uint8_t val);
 void MusicDriver_playTag(void);
+uint8_t MusicDriver_done(void);
 #endif
