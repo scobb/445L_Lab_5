@@ -41,6 +41,7 @@
 #define MAX 4095
 // define the period at 120 beats per minute, refreshing each 12th note
 #define PERIOD_BPM_120_12 3333333
+#define PERIOD_BPM_200_12 1333334
 #define PERIOD_BPM_400_12 666667
 // 12-bit 32-element sine wave
 // multiply each value by 2 to shift into bits 12:1 of SSI packet
@@ -58,7 +59,7 @@ int main(void){
 	FrequencyTimer_Init();
 	FrequencyTimer2_Init();
 	MixerTimer_Init();
-	TempoTimer_Init(PERIOD_BPM_120_12);
+	TempoTimer_Init(PERIOD_BPM_400_12);
 	MusicDriver_Init();
 	DAC_Init(MAX/2);
 	//FrequencyTimer_arm(C5);

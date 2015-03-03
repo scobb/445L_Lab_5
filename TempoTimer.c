@@ -26,6 +26,8 @@ void TempoTimer_Init(uint32_t period){long sr; int delay;
   NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF1FFF)|0x00004000; // 8) priority 2
   NVIC_EN0_R |= NVIC_EN0_INT21;     // 9) enable interrupt 19 in NVIC
   TIMER1_CTL_R |= 0x00000001;      // 10) enable TIMER1A
+	FrequencyTimer_setNum(1);
+	FrequencyTimer2_setNum(1);
   EndCritical(sr);
 }
 void TempoTimer_setHeartbeatTask(void(*task)(void)){
@@ -58,17 +60,17 @@ void Timer1A_Handler(void){
 	Note* currentBassNote;
 	Instrument* currentInstrument;
 	Instrument* currentBassInstrument;
-	sr = StartCritical();
 	MusicDriver_getMelody(&currentNote, &currentInstrument);
-	MusicDriver_getBass(&currentBassNote, &currentBassInstrument);
+	//MusicDriver_getBass(&currentBassNote, &currentBassInstrument);
+	sr = StartCritical();
 	FrequencyTimer_setNotes(currentNote);
 	FrequencyTimer_setInstruments(currentInstrument);
-	FrequencyTimer_setNum(1);
 	FrequencyTimer2_setNotes(currentBassNote);
 	FrequencyTimer2_setInstruments(currentBassInstrument);
-	FrequencyTimer2_setNum(1);
 	EndCritical(sr);
-	FrequencyTimer_arm(currentNote->periodCycles);
-	FrequencyTimer2_arm(currentBassNote->periodCycles);
-	MixerTimer_arm((currentNote->periodCycles)*2);//If only playing bass, need to change to currentBassNote
+	if (!MusicDriver_done()){
+		FrequencyTimer_arm(currentNote->periodCycles);
+		FrequencyTimer2_arm(currentBassNote->periodCycles);
+		MixerTimer_arm((currentNote->periodCycles)/2);//If only playing bass, need to change to currentBassNote
+	}
 }
